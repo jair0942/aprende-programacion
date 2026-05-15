@@ -10,12 +10,6 @@ const lenis = new Lenis({
     smoothWheel: true,
 });
 
-function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
-
 // Sync Lenis with GSAP ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 lenis.on('scroll', ScrollTrigger.update);
@@ -204,13 +198,15 @@ if (track) {
     cards.forEach((card, i) => {
         gsap.from(card, {
             opacity: 0,
-            x: 80,
-            duration: 0.6,
-            ease: 'power2.out',
+            y: 60,
+            scale: 0.85,
+            rotation: 2,
+            duration: 1,
+            ease: 'back.out(1.5)',
             scrollTrigger: {
                 trigger: card,
                 containerAnimation: horizAction,
-                start: 'left 90%',
+                start: 'left 85%',
                 toggleActions: 'play none none none',
             }
         });
@@ -263,7 +259,11 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-            lenis.scrollTo(target, { offset: -80 });
+            lenis.scrollTo(target, { 
+                offset: -80, 
+                duration: 1.2, 
+                ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) 
+            });
         }
     });
 });
